@@ -17,12 +17,10 @@ class ListViewModel : ViewModel() {
     }
 
     private fun loadItemList() {
+        _list.value = listOf()
+
         viewModelScope.launch(Dispatchers.IO) {
             // TODO load data from DB
-        }
-
-        _list.value = (1..100).map {
-            TodoItem.getNewItem(it, "test $it")
         }
     }
 
@@ -33,19 +31,20 @@ class ListViewModel : ViewModel() {
         onListModified(temp.toList())
     }
 
-    fun modifyItem(item: TodoItem, newName: String) {
+    fun modifyItemName(item: TodoItem, newName: String) {
         val temp = list.value!!.toMutableList()
-        temp[item.id] = TodoItem.getItemWithUpdatedName(item, newName)
+
+        temp[item.id] = TodoItem.getUpdatedItem(item, newName)
         onListModified(temp.toList())
     }
 
-    fun toggleItem(item: TodoItem) {
+    fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
         val temp = list.value!!.toMutableList()
-        temp[item.id] = TodoItem.getToggledItem(item)
+        temp[item.id] = TodoItem.getUpdatedItem(item, isDone)
         onListModified(temp.toList())
     }
 
-    fun deleteItem(item: TodoItem) {
+    fun removeItem(item: TodoItem) {
         val temp = list.value!!.toMutableList()
         temp.removeAt(item.id)
         onListModified(temp.toList())
@@ -66,6 +65,8 @@ class ListViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             // TODO save ItemList to DB
         }
+        // for debugging
+        list.forEach { println("saved: $it") }
     }
 
 }

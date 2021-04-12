@@ -1,45 +1,49 @@
 package jp.takezaki.todo.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Checkbox
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.viewmodel.ListViewModel
 
 @Composable
-fun ToDoListView(
-    model: ListViewModel,
-) {
+fun ToDoListView(model: ListViewModel) {
+    val list = remember { mutableStateOf(model.list.value) }
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
     ) {
         val addButton = createRef()
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            model.list.value?.map {
-                ListItemView(it, model)
-            }
-
+            list.value!!
+                .sortedBy {
+                    it.dateTime
+                }
+                .map {
+                    ListItemView(it, model, list)
+                }
         }
         FloatingActionButton(
-            onClick = { /* add new item */ },
+            onClick = {
+                model.addItem("")
+                list.value = model.list.value
+            },
             modifier = Modifier
                 .constrainAs(addButton) {
                     bottom.linkTo(parent.bottom)
@@ -51,14 +55,26 @@ fun ToDoListView(
     }
 }
 
-
 @Composable
-fun ListItemView(item: TodoItem, model: ListViewModel) {
+fun ListItemView(
+    item: TodoItem,
+    model: ListViewModel,
+    list: MutableState<List<TodoItem>?>, // TODO remove
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         ItemStateView(item, model)
         ItemTextView(item, model)
+        Button(
+            onClick = {
+                model.removeItem(item)
+                list.value = model.list.value
+            },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+        ) {
+            Text(text = "x")
+        }
     }
 }
 
@@ -67,12 +83,13 @@ private fun ItemStateView(
     item: TodoItem,
     model: ListViewModel,
 ) {
+    val isDone = remember { mutableStateOf(item.isDone) }
     Checkbox(
-        checked = item.isDone,
-        onCheckedChange = null,
-        modifier = Modifier.clickable {
-            model.toggleItem(item)
-        }
+        checked = isDone.value,
+        onCheckedChange = {
+            model.updateItemCheckbox(item, it)
+            isDone.value = it
+        },
     )
 }
 
@@ -81,15 +98,17 @@ private fun ItemTextView(
     item: TodoItem,
     model: ListViewModel,
 ) {
-    Text(
-        text = item.name,
-        fontSize = 30.sp,
-        modifier = Modifier
-            .padding(
-                horizontal = 10.dp,
-                vertical = 5.dp
-            ),
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1,
+    val name = remember { mutableStateOf(item.name) }
+
+    TextField(
+        value = name.value,
+        onValueChange = {
+            model.modifyItemName(item, it)
+            name.value = it
+        },
+        modifier = Modifier.padding(
+            horizontal = 10.dp,
+            vertical = 5.dp,
+        ),
     )
 }
