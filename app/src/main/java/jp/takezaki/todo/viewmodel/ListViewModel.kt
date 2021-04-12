@@ -32,28 +32,32 @@ class ListViewModel : ViewModel() {
         temp.onListModified()
     }
 
-    fun modifyItemName(item: TodoItem, newName: String) {
+    fun modifyItemName(item: TodoItem, newName: String): TodoItem {
         val temp = list.value!!.toMutableList()
 
         temp.removeIf { it.hashCode() == item.hashCode() }
-        temp.add(TodoItem.getUpdatedItem(item, newName))
+        val updatedItem = TodoItem.getUpdatedItem(item, newName)
+        temp.add(updatedItem)
         temp.sortBy {
             it.dateTime
         }
 
         temp.onListModified()
+        return updatedItem
     }
 
-    fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
+    fun updateItemCheckbox(item: TodoItem, isDone: Boolean): TodoItem {
         val temp = list.value!!.toMutableList()
 
         temp.removeIf { it.hashCode() == item.hashCode() }
-        temp.add(TodoItem.getUpdatedItem(item, isDone))
+        val updatedItem = TodoItem.getUpdatedItem(item, isDone)
+        temp.add(updatedItem)
         temp.sortBy {
             it.dateTime
         }
 
         temp.onListModified()
+        return updatedItem
     }
 
     fun removeItem(item: TodoItem) {

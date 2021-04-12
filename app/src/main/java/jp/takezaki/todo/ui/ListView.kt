@@ -57,11 +57,13 @@ fun ListItemView(
     model: ListViewModel,
     list: MutableState<List<TodoItem>?>, // TODO remove
 ) {
+    val itemState = remember { mutableStateOf(item) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ItemStateView(item, model)
-        ItemTextView(item, model)
+        ItemCheckboxView(itemState, model)
+        ItemTextView(itemState, model)
         Button(
             onClick = {
                 model.removeItem(item)
@@ -76,17 +78,14 @@ fun ListItemView(
 }
 
 @Composable
-private fun ItemStateView(
-    item: TodoItem,
+private fun ItemCheckboxView(
+    itemState: MutableState<TodoItem>,
     model: ListViewModel,
 ) {
-    val isDone = remember { mutableStateOf(item.isDone) }
-
     Checkbox(
-        checked = isDone.value,
+        checked = itemState.value.isDone,
         onCheckedChange = {
-            model.updateItemCheckbox(item, it)
-            isDone.value = it
+            itemState.value = model.updateItemCheckbox(itemState.value, it)
         },
         modifier = Modifier.padding(5.dp),
     )
@@ -94,16 +93,13 @@ private fun ItemStateView(
 
 @Composable
 private fun ItemTextView(
-    item: TodoItem,
+    itemState: MutableState<TodoItem>,
     model: ListViewModel,
 ) {
-    val name = remember { mutableStateOf(item.name) }
-
     TextField(
-        value = name.value,
+        value = itemState.value.name,
         onValueChange = {
-            model.modifyItemName(item, it)
-            name.value = it
+            itemState.value = model.modifyItemName(itemState.value, it)
         },
         modifier = Modifier.padding(5.dp),
     )
