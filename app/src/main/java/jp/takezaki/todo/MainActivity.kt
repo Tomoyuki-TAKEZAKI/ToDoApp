@@ -4,12 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import jp.takezaki.todo.ui.TodoApp
+import jp.takezaki.todo.viewmodel.ListViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val vm = ListViewModel()
         setContent {
-            TodoApp()
+            vm.list.value?.let { TodoApp(it) }
         }
     }
 }

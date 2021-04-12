@@ -11,13 +11,13 @@ import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.ui.theme.ToDoTheme
 
 @Composable
-fun TodoApp() {
+fun TodoApp(list: List<TodoItem>) {
     ToDoTheme {
         Surface(color = MaterialTheme.colors.background) {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                ToDoListView(getSampleList())
+                ToDoListView(list)
             }
         }
     }
@@ -31,9 +31,3 @@ fun ToDoListView(list: List<TodoItem>) {
         }
     }
 }
-
-// for testing
-private fun getSampleList(): List<TodoItem> =
-    (1..100).map {
-        TodoItem(it, "test $it ${"test".repeat(5)}", it % 2 == 0)
-    }
