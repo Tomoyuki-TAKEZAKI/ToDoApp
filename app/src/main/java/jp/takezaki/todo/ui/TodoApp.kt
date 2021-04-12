@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.ui.theme.ToDoTheme
 
 @Composable
@@ -16,23 +17,23 @@ fun TodoApp() {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                ToDoList()
+                ToDoListView(getSampleList())
             }
         }
     }
 }
 
 @Composable
-fun ToDoList() {
+fun ToDoListView(list: List<TodoItem>) {
     Column {
-        getSampleList().map { // for testing
-            ListItem(name = it.first, isDone = it.second)
+        list.map {
+            ListItemView(item = it)
         }
     }
 }
 
 // for testing
-private fun getSampleList(): List<Pair<String, Boolean>> =
+private fun getSampleList(): List<TodoItem> =
     (1..100).map {
-        Pair("test $it ${"test".repeat(5)}", it % 2 == 0)
+        TodoItem(it, "test $it ${"test".repeat(5)}", it % 2 == 0)
     }

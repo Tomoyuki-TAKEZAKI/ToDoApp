@@ -11,21 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.takezaki.todo.TodoItem
 
 @Composable
-fun ListItem(name: String, isDone: Boolean) {
+fun ListItemView(item: TodoItem) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ItemState(isDone = isDone)
-        ItemText(name = name)
+        ItemStateView(item = item)
+        ItemTextView(item = item)
     }
 }
 
 @Composable
-private fun ItemState(isDone: Boolean) {
+private fun ItemStateView(item: TodoItem) {
     Checkbox(
-        checked = isDone,
+        checked = item.isDone,
         onCheckedChange = null,
         modifier = Modifier.clickable(
             onClick = {
@@ -36,10 +37,10 @@ private fun ItemState(isDone: Boolean) {
 }
 
 @Composable
-private fun ItemText(name: String) {
+private fun ItemTextView(item: TodoItem) {
     // TODO use TextField
     Text(
-        text = name,
+        text = item.name,
         fontSize = 30.sp,
         modifier = Modifier
             .padding(
