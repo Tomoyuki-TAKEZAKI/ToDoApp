@@ -31,13 +31,9 @@ fun ToDoListView(model: ListViewModel) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            list.value!!
-                .sortedBy {
-                    it.dateTime
-                }
-                .map {
-                    ListItemView(it, model, list)
-                }
+            list.value!!.map {
+                ListItemView(it, model, list)
+            }
         }
         FloatingActionButton(
             onClick = {

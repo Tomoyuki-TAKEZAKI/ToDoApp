@@ -25,28 +25,34 @@ class ListViewModel : ViewModel() {
     }
 
     fun addItem(name: String) {
-        val id = list.value!!.size
         val temp = list.value!!.toMutableList()
-        temp.add(TodoItem.getNewItem(id, name))
+        temp.add(TodoItem.getNewItem(name))
         onListModified(temp.toList())
     }
 
     fun modifyItemName(item: TodoItem, newName: String) {
         val temp = list.value!!.toMutableList()
-
-        temp[item.id] = TodoItem.getUpdatedItem(item, newName)
+        temp.removeIf {
+            it.hashCode() == item.hashCode()
+        }
+        temp.add(TodoItem.getUpdatedItem(item, newName))
         onListModified(temp.toList())
     }
 
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
         val temp = list.value!!.toMutableList()
-        temp[item.id] = TodoItem.getUpdatedItem(item, isDone)
+        temp.removeIf {
+            it.hashCode() == item.hashCode()
+        }
+        temp.add(TodoItem.getUpdatedItem(item, isDone))
         onListModified(temp.toList())
     }
 
     fun removeItem(item: TodoItem) {
         val temp = list.value!!.toMutableList()
-        temp.removeAt(item.id)
+        temp.removeIf {
+            it.hashCode() == item.hashCode()
+        }
         onListModified(temp.toList())
     }
 
@@ -66,7 +72,8 @@ class ListViewModel : ViewModel() {
             // TODO save ItemList to DB
         }
         // for debugging
-        list.forEach { println("saved: $it") }
+        println("= ".repeat(50))
+        list.forEach { println("saved: item $it, hashcode: ${it.hashCode()}") }
     }
 
 }
