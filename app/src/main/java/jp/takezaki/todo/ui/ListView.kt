@@ -67,7 +67,8 @@ fun ListItemView(
                 model.removeItem(item)
                 list.value = model.list.value
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+            modifier = Modifier.padding(5.dp),
         ) {
             Text(text = "x")
         }
@@ -80,12 +81,14 @@ private fun ItemStateView(
     model: ListViewModel,
 ) {
     val isDone = remember { mutableStateOf(item.isDone) }
+
     Checkbox(
         checked = isDone.value,
         onCheckedChange = {
             model.updateItemCheckbox(item, it)
             isDone.value = it
         },
+        modifier = Modifier.padding(5.dp),
     )
 }
 
@@ -102,9 +105,6 @@ private fun ItemTextView(
             model.modifyItemName(item, it)
             name.value = it
         },
-        modifier = Modifier.padding(
-            horizontal = 10.dp,
-            vertical = 5.dp,
-        ),
+        modifier = Modifier.padding(5.dp),
     )
 }

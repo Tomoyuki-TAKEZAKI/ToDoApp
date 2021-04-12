@@ -26,54 +26,66 @@ class ListViewModel : ViewModel() {
 
     fun addItem(name: String) {
         val temp = list.value!!.toMutableList()
+
         temp.add(TodoItem.getNewItem(name))
-        onListModified(temp.toList())
+
+        temp.onListModified()
     }
 
     fun modifyItemName(item: TodoItem, newName: String) {
         val temp = list.value!!.toMutableList()
-        temp.removeIf {
-            it.hashCode() == item.hashCode()
-        }
+
+        temp.removeIf { it.hashCode() == item.hashCode() }
         temp.add(TodoItem.getUpdatedItem(item, newName))
-        onListModified(temp.toList())
+        temp.sortBy {
+            it.dateTime
+        }
+
+        temp.onListModified()
     }
 
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
         val temp = list.value!!.toMutableList()
-        temp.removeIf {
-            it.hashCode() == item.hashCode()
-        }
+
+        temp.removeIf { it.hashCode() == item.hashCode() }
         temp.add(TodoItem.getUpdatedItem(item, isDone))
-        onListModified(temp.toList())
+        temp.sortBy {
+            it.dateTime
+        }
+
+        temp.onListModified()
     }
 
     fun removeItem(item: TodoItem) {
         val temp = list.value!!.toMutableList()
+
         temp.removeIf {
             it.hashCode() == item.hashCode()
         }
-        onListModified(temp.toList())
-    }
-
-    private fun onListModified(newList: List<TodoItem>) {
-        newList.let {
-            updateList(it)
-            saveList(it)
+        temp.sortBy {
+            it.dateTime
         }
+
+        temp.onListModified()
     }
 
-    private fun updateList(newList: List<TodoItem>) {
-        _list.value = newList
+    private fun List<TodoItem>.onListModified() {
+        updateUI()
+        save()
     }
 
-    private fun saveList(list: List<TodoItem>) {
+    private fun List<TodoItem>.updateUI() {
+        _list.value = this
+    }
+
+    private fun List<TodoItem>.save() {
         viewModelScope.launch(Dispatchers.IO) {
             // TODO save ItemList to DB
         }
+
         // for debugging
         println("= ".repeat(50))
-        list.forEach { println("saved: item $it, hashcode: ${it.hashCode()}") }
+        forEach { println("saved: item $it, hashcode: ${it.hashCode()}") }
     }
 
 }
