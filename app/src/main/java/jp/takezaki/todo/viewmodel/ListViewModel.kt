@@ -35,13 +35,13 @@ class ListViewModel : ViewModel() {
 
     fun modifyItem(item: TodoItem, newName: String) {
         val temp = list.value!!.toMutableList()
-        temp.add(TodoItem.getItemWithUpdatedName(item, newName))
+        temp[item.id] = TodoItem.getItemWithUpdatedName(item, newName)
         onListModified(temp.toList())
     }
 
     fun toggleItem(item: TodoItem) {
         val temp = list.value!!.toMutableList()
-        temp.add(TodoItem.getToggledItem(item))
+        temp[item.id] = TodoItem.getToggledItem(item)
         onListModified(temp.toList())
     }
 

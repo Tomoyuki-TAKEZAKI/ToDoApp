@@ -13,4 +13,6 @@ class TodoItem private constructor(val id: Int, val name: String, val isDone: Bo
             TodoItem(item.id, item.name, !item.isDone)
     }
 
+    override fun toString(): String = "TodoItem(id: $id, name: $name, isDone: $isDone)"
+
 }

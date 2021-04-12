@@ -1,5 +1,6 @@
 package jp.takezaki.todo.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -13,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.viewmodel.ListViewModel
-
 
 @Composable
 fun ToDoListView(model: ListViewModel) {
@@ -42,7 +42,8 @@ private fun ItemStateView(
 ) {
     Checkbox(
         checked = item.isDone,
-        onCheckedChange = {
+        onCheckedChange = null,
+        modifier = Modifier.clickable {
             model.toggleItem(item)
         }
     )
