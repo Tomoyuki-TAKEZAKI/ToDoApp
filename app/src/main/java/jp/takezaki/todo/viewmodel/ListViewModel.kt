@@ -21,9 +21,9 @@ class ListViewModel : ViewModel() {
             // TODO load data from DB
         }
 
-        _list.value = listOf(
-            TodoItem.getNewItem(0, "test"),
-        )
+        _list.value = (1..100).map {
+            TodoItem.getNewItem(it, "test $it")
+        }
     }
 
     fun addItem(name: String) {
