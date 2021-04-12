@@ -27,20 +27,18 @@ class ListViewModel : ViewModel() {
         }
     }
 
-    fun updateItem(item: TodoItem) {
-        // delete old item and register new item
+    fun modifyItem() {
 
-//        onItemModified()
+//        onListModified()
     }
 
-    fun deleteItem(item: TodoItem) {
-        // delete item
-        
-//        onItemModified()
+    fun deleteItem() {
+
+//        onListModified()
     }
 
-    private fun onItemModified(newList: List<TodoItem>) {
-        list.value?.let {
+    private fun onListModified(newList: List<TodoItem>) {
+        newList.let {
             updateList(it)
             saveList(it)
         }

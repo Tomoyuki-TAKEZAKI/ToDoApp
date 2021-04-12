@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.takezaki.todo.TodoItem
+import jp.takezaki.todo.TodoItem.Factory.getToggledItem
 
 @Composable
 fun ListItemView(item: TodoItem) {
@@ -30,7 +31,9 @@ private fun ItemStateView(item: TodoItem) {
         onCheckedChange = null,
         modifier = Modifier.clickable(
             onClick = {
-                // toggle and save state
+                val item = getToggledItem(item)
+
+                // call updateItem()
             }
         )
     )

@@ -3,6 +3,7 @@ package jp.takezaki.todo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import jp.takezaki.todo.ui.TodoApp
 import jp.takezaki.todo.viewmodel.ListViewModel
 
@@ -10,9 +11,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val vm = ListViewModel()
+        val model: ListViewModel by viewModels()
         setContent {
-            vm.list.value?.let { TodoApp(it) }
+            model.list.value?.let { TodoApp(it) }
         }
     }
 }
