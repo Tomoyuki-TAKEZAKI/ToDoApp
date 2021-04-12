@@ -8,12 +8,16 @@ import jp.takezaki.todo.ui.TodoApp
 import jp.takezaki.todo.viewmodel.ListViewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val model: ListViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val model: ListViewModel by viewModels()
         setContent {
-            model.list.value?.let { TodoApp(it) }
+            TodoApp(model)
         }
+
     }
+
 }

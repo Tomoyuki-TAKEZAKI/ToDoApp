@@ -1,6 +1,6 @@
 package jp.takezaki.todo.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Checkbox
@@ -12,35 +12,47 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.takezaki.todo.TodoItem
-import jp.takezaki.todo.TodoItem.Factory.getToggledItem
+import jp.takezaki.todo.viewmodel.ListViewModel
+
 
 @Composable
-fun ListItemView(item: TodoItem) {
+fun ToDoListView(model: ListViewModel) {
+    Column {
+        model.list.value?.map {
+            ListItemView(it, model)
+        }
+    }
+}
+
+
+@Composable
+fun ListItemView(item: TodoItem, model: ListViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ItemStateView(item = item)
-        ItemTextView(item = item)
+        ItemStateView(item, model)
+        ItemTextView(item, model)
     }
 }
 
 @Composable
-private fun ItemStateView(item: TodoItem) {
+private fun ItemStateView(
+    item: TodoItem,
+    model: ListViewModel,
+) {
     Checkbox(
         checked = item.isDone,
-        onCheckedChange = null,
-        modifier = Modifier.clickable(
-            onClick = {
-                val item = getToggledItem(item)
-
-                // call updateItem()
-            }
-        )
+        onCheckedChange = {
+            model.toggleItem(item)
+        }
     )
 }
 
 @Composable
-private fun ItemTextView(item: TodoItem) {
+private fun ItemTextView(
+    item: TodoItem,
+    model: ListViewModel,
+) {
     // TODO use TextField
     Text(
         text = item.name,

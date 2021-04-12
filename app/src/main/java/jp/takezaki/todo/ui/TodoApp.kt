@@ -7,27 +7,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.ui.theme.ToDoTheme
+import jp.takezaki.todo.viewmodel.ListViewModel
 
 @Composable
-fun TodoApp(list: List<TodoItem>) {
+fun TodoApp(model: ListViewModel) {
     ToDoTheme {
         Surface(color = MaterialTheme.colors.background) {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                ToDoListView(list)
+                ToDoListView(model)
             }
         }
     }
 }
 
-@Composable
-fun ToDoListView(list: List<TodoItem>) {
-    Column {
-        list.map {
-            ListItemView(item = it)
-        }
-    }
-}
