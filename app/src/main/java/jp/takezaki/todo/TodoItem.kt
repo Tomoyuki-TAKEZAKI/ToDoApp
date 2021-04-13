@@ -17,7 +17,6 @@ class TodoItem private constructor(
 
         fun getUpdatedItem(item: TodoItem, isDone: Boolean): TodoItem =
             TodoItem(item.name, isDone, item.dateTime)
-
     }
 
     override fun toString(): String = "TodoItem(name: $name, isDone: $isDone, dateTime: $dateTime)"

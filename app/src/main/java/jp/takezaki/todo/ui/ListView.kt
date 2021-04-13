@@ -8,9 +8,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +21,7 @@ import jp.takezaki.todo.viewmodel.ListViewModel
 
 @Composable
 fun ToDoListView(model: ListViewModel = viewModel()) {
-    val list = remember { mutableStateOf(model.list.value) }
+    val list by model.list.observeAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -32,14 +31,13 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            list.value!!.map {
-                ListItemView(it, list)
+            list?.map {
+                ListItemView(it)
             }
         }
         FloatingActionButton(
             onClick = {
                 model.addItem("")
-                list.value = model.list.value
             },
             modifier = Modifier
                 .constrainAs(addButton) {
@@ -55,20 +53,17 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
 @Composable
 fun ListItemView(
     item: TodoItem,
-    list: MutableState<List<TodoItem>?>,
     model: ListViewModel = viewModel(),
 ) {
-    val itemState = remember { mutableStateOf(item) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ItemCheckboxView(itemState)
-        ItemTextView(itemState)
+        ItemCheckboxView(item)
+        ItemTextView(item)
         Button(
             onClick = {
                 model.removeItem(item)
-                list.value = model.list.value
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
             modifier = Modifier.padding(5.dp),
@@ -80,13 +75,13 @@ fun ListItemView(
 
 @Composable
 private fun ItemCheckboxView(
-    itemState: MutableState<TodoItem>,
+    item: TodoItem,
     model: ListViewModel = viewModel(),
 ) {
     Checkbox(
-        checked = itemState.value.isDone,
+        checked = item.isDone,
         onCheckedChange = {
-            itemState.value = model.updateItemCheckbox(itemState.value, it)
+            model.updateItemCheckbox(item, it)
         },
         modifier = Modifier.padding(5.dp),
     )
@@ -94,13 +89,13 @@ private fun ItemCheckboxView(
 
 @Composable
 private fun ItemTextView(
-    itemState: MutableState<TodoItem>,
+    item: TodoItem,
     model: ListViewModel = viewModel(),
 ) {
     TextField(
-        value = itemState.value.name,
+        value = item.name,
         onValueChange = {
-            itemState.value = model.modifyItemName(itemState.value, it)
+            model.modifyItemName(item, it)
         },
         modifier = Modifier.padding(5.dp),
     )

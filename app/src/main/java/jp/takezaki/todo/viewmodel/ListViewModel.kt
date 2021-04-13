@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 
 class ListViewModel : ViewModel() {
     private val _list = MutableLiveData<List<TodoItem>>()
-    val list: LiveData<List<TodoItem>> = _list
+    val list: LiveData<List<TodoItem>>
+        get() = _list
 
     init {
         loadItemList()
@@ -32,7 +33,7 @@ class ListViewModel : ViewModel() {
         temp.onListModified()
     }
 
-    fun modifyItemName(item: TodoItem, newName: String): TodoItem {
+    fun modifyItemName(item: TodoItem, newName: String) {
         val temp = list.value!!.toMutableList()
 
         temp.removeIf { it.hashCode() == item.hashCode() }
@@ -43,10 +44,9 @@ class ListViewModel : ViewModel() {
         }
 
         temp.onListModified()
-        return updatedItem
     }
 
-    fun updateItemCheckbox(item: TodoItem, isDone: Boolean): TodoItem {
+    fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
         val temp = list.value!!.toMutableList()
 
         temp.removeIf { it.hashCode() == item.hashCode() }
@@ -57,7 +57,6 @@ class ListViewModel : ViewModel() {
         }
 
         temp.onListModified()
-        return updatedItem
     }
 
     fun removeItem(item: TodoItem) {
@@ -74,11 +73,11 @@ class ListViewModel : ViewModel() {
     }
 
     private fun List<TodoItem>.onListModified() {
-        updateUI()
+        setList()
         save()
     }
 
-    private fun List<TodoItem>.updateUI() {
+    private fun List<TodoItem>.setList() {
         _list.value = this
     }
 
@@ -91,5 +90,4 @@ class ListViewModel : ViewModel() {
         println("= ".repeat(50))
         forEach { println("saved: item $it, hashcode: ${it.hashCode()}") }
     }
-
 }
