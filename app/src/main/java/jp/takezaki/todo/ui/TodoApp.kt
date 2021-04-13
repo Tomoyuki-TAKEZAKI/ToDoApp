@@ -7,10 +7,10 @@ import jp.takezaki.todo.ui.theme.ToDoTheme
 import jp.takezaki.todo.viewmodel.ListViewModel
 
 @Composable
-fun TodoApp(model: ListViewModel) {
+fun TodoApp() {
     ToDoTheme {
         Surface(color = MaterialTheme.colors.background) {
-            ToDoListView(model)
+            ToDoListView()
         }
     }
 }

@@ -9,17 +9,12 @@ import jp.takezaki.todo.viewmodel.ListViewModel
 
 class MainActivity : ComponentActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val model: ListViewModel by viewModels()
-
         setContent {
-            TodoApp(model)
+            TodoApp()
         }
-
     }
-
 }
 
