@@ -9,7 +9,7 @@ import jp.takezaki.todo.viewmodel.ListViewModel
 @Composable
 fun TodoApp() {
     ToDoTheme {
-        Surface(color = MaterialTheme.colors.background) {
+        Surface {
             ToDoListView()
         }
     }

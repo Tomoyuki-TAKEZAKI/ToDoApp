@@ -36,12 +36,10 @@ class ListViewModel : ViewModel() {
     fun modifyItemName(item: TodoItem, newName: String) {
         val temp = list.value!!.toMutableList()
 
-        temp.removeIf { it.hashCode() == item.hashCode() }
+        temp.removeIf { it == item }
         val updatedItem = TodoItem.getUpdatedItem(item, newName)
         temp.add(updatedItem)
-        temp.sortBy {
-            it.dateTime
-        }
+        temp.sortBy { it.dateTime }
 
         temp.onListModified()
     }
@@ -49,12 +47,10 @@ class ListViewModel : ViewModel() {
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
         val temp = list.value!!.toMutableList()
 
-        temp.removeIf { it.hashCode() == item.hashCode() }
+        temp.removeIf { it == item }
         val updatedItem = TodoItem.getUpdatedItem(item, isDone)
         temp.add(updatedItem)
-        temp.sortBy {
-            it.dateTime
-        }
+        temp.sortBy { it.dateTime }
 
         temp.onListModified()
     }
@@ -62,12 +58,8 @@ class ListViewModel : ViewModel() {
     fun removeItem(item: TodoItem) {
         val temp = list.value!!.toMutableList()
 
-        temp.removeIf {
-            it.hashCode() == item.hashCode()
-        }
-        temp.sortBy {
-            it.dateTime
-        }
+        temp.removeIf { it == item }
+        temp.sortBy { it.dateTime }
 
         temp.onListModified()
     }

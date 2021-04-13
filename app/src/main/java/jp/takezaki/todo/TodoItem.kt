@@ -23,4 +23,12 @@ class TodoItem private constructor(
 
     override fun hashCode(): Int = dateTime.hashCode()
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is TodoItem) return false
+
+        if (dateTime != other.dateTime) return false
+
+        return true
+    }
+
 }

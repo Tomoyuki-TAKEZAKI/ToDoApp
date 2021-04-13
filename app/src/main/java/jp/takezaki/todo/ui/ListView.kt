@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,8 +28,7 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
     val list by model.list.observeAsState()
 
     ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         val addButton = createRef()
         Column(
@@ -36,16 +39,19 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
             }
         }
         FloatingActionButton(
-            onClick = {
-                model.addItem("")
-            },
+            onClick = { model.addItem("") },
             modifier = Modifier
                 .constrainAs(addButton) {
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }
                 .padding(20.dp),
-            content = {}
+            content = {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "",
+                )
+            }
         )
     }
 }
@@ -55,7 +61,6 @@ fun ListItemView(
     item: TodoItem,
     model: ListViewModel = viewModel(),
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -68,7 +73,7 @@ fun ListItemView(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
             modifier = Modifier.padding(5.dp),
         ) {
-            Text(text = "x")
+            Icon(imageVector = Icons.Default.Delete, contentDescription = "")
         }
     }
 }
