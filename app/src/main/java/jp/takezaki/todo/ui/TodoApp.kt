@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.takezaki.todo.Screen
-import jp.takezaki.todo.ui.theme.DetailView
+import jp.takezaki.todo.ui.theme.ItemDetailView
 import jp.takezaki.todo.ui.theme.ToDoTheme
 import jp.takezaki.todo.viewmodel.ScreenViewModel
 
@@ -19,7 +19,7 @@ fun TodoApp(model: ScreenViewModel = viewModel()) {
         Surface {
             when (val s = screen) {
                 is Screen.ListScreen -> ToDoListView()
-                is Screen.DetailScreen -> DetailView(s.item)
+                is Screen.DetailScreen -> ItemDetailView(s.item)
             }
         }
     }

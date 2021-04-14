@@ -25,17 +25,17 @@ class ListViewModel : ViewModel() {
         }
     }
 
-    fun addItem(name: String) {
+    fun addNewItem(name: String) {
         list.value!!.toMutableList().apply {
             add(TodoItem.getNewItem(name))
             onListModified()
         }
     }
 
-    fun modifyItemName(item: TodoItem, newName: String) {
+    fun updateItemName(item: TodoItem, newName: String) {
         list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
-            add(TodoItem.getUpdatedItem(item, newName))
+            add(TodoItem.getItemWithUpdatedName(item, newName))
             sortBy { it.creationDateTime }
             onListModified()
         }
@@ -44,7 +44,16 @@ class ListViewModel : ViewModel() {
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
         list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
-            add(TodoItem.getUpdatedItem(item, isDone))
+            add(TodoItem.getItemWithUpdatedCheckBox(item, isDone))
+            sortBy { it.creationDateTime }
+            onListModified()
+        }
+    }
+
+    fun updateItemDetailText(item: TodoItem, detailText: String) {
+        list.value!!.toMutableList().apply {
+            removeIf { it shouldBeUpdatedBy item }
+            add(TodoItem.getItemWithUpdatedDetailText(item, detailText))
             sortBy { it.creationDateTime }
             onListModified()
         }

@@ -6,16 +6,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,7 +42,7 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
 @Composable
 private fun AddButton(model: ListViewModel = viewModel()) {
     Button(
-        onClick = { model.addItem("") },
+        onClick = { model.addNewItem("") },
         modifier = Modifier.padding(10.dp),
         content = {
             Icon(
@@ -86,27 +87,8 @@ private fun ItemTextView(
         modifier = Modifier
             .padding(5.dp)
             .clickable {
-            model.setScreen(Screen.DetailScreen(item))
-        },
+                model.setScreen(Screen.DetailScreen(item))
+            },
         fontSize = 20.sp,
     )
-}
-
-@Composable
-private fun DeleteButton(
-    item: TodoItem,
-    model: ListViewModel = viewModel(),
-) {
-    Button(
-        onClick = {
-            model.removeItem(item)
-        },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
-        modifier = Modifier.padding(5.dp),
-    ) {
-        Icon(
-            imageVector = Icons.Default.Delete,
-            contentDescription = null
-        )
-    }
 }

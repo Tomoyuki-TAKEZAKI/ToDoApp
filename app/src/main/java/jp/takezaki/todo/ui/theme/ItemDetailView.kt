@@ -23,7 +23,7 @@ import jp.takezaki.todo.viewmodel.ListViewModel
 import jp.takezaki.todo.viewmodel.ScreenViewModel
 
 @Composable
-fun DetailView(
+fun ItemDetailView(
     item: TodoItem,
     listViewModel: ListViewModel = viewModel(),
     screenViewModel: ScreenViewModel = viewModel(),
@@ -42,7 +42,8 @@ fun DetailView(
         }
 
         Spacer(modifier = Modifier.padding(10.dp))
-        ItemDetailText(currentItem)
+        ItemNameView(currentItem)
+        ItemDetailTextView(currentItem)
     }
 
     BackHandler {
@@ -87,21 +88,42 @@ private fun DeleteButton(
 }
 
 @Composable
-private fun ItemDetailText(
+private fun ItemNameView(
     item: TodoItem,
     model: ListViewModel = viewModel(),
 ) {
     Column {
+        Text(
+            text = "name",
+            fontSize = 20.sp,
+        )
         TextField(
             value = item.name,
             onValueChange = {
-                model.modifyItemName(item, it)
+                model.updateItemName(item, it)
             },
             modifier = Modifier.padding(5.dp),
         )
+    }
+}
+
+@Composable
+private fun ItemDetailTextView(
+    item: TodoItem,
+    model: ListViewModel = viewModel(),
+) {
+    Column {
         Text(
-            text = "creation date and time: ${item.creationDateTime}",
+            text = "detail",
             fontSize = 20.sp,
+        )
+        TextField(
+            value = item.detailText,
+            onValueChange = {
+                model.updateItemDetailText(item, it)
+            },
+            modifier = Modifier.padding(5.dp),
         )
     }
 }
+
