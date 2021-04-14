@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.takezaki.todo.Screen
+import jp.takezaki.todo.ui.detailscreen.view.ItemDetailView
+import jp.takezaki.todo.ui.listscreen.view.ToDoListView
 import jp.takezaki.todo.ui.theme.ToDoTheme
 import jp.takezaki.todo.viewmodel.ScreenViewModel
 

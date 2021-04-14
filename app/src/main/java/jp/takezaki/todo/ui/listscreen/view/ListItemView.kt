@@ -1,4 +1,4 @@
-package jp.takezaki.todo.ui
+package jp.takezaki.todo.ui.listscreen.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
