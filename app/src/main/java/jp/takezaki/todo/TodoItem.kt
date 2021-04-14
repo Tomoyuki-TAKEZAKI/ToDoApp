@@ -2,28 +2,32 @@ package jp.takezaki.todo
 
 import java.time.LocalDateTime
 
-data class TodoItem(
+class TodoItem private constructor(
     val name: String,
     val isDone: Boolean,
     val creationDateTime: LocalDateTime,
     val detailText: String,
+    val dueDateTime: LocalDateTime?
 ) {
 
     companion object Factory {
         fun getNewItem(name: String): TodoItem =
-            TodoItem(name, false, LocalDateTime.now(), "")
+            TodoItem(name, false, LocalDateTime.now(), "", null)
 
         fun getItemWithUpdatedName(item: TodoItem, newName: String): TodoItem =
-            TodoItem(newName, item.isDone, item.creationDateTime, item.detailText)
+            TodoItem(newName, item.isDone, item.creationDateTime, item.detailText, item.dueDateTime)
 
         fun getItemWithUpdatedCheckBox(item: TodoItem, isDone: Boolean): TodoItem =
-            TodoItem(item.name, isDone, item.creationDateTime, item.detailText)
+            TodoItem(item.name, isDone, item.creationDateTime, item.detailText, item.dueDateTime)
 
         fun getItemWithUpdatedDetailText(item: TodoItem, detailText: String) =
-            TodoItem(item.name, item.isDone, item.creationDateTime, detailText)
+            TodoItem(item.name, item.isDone, item.creationDateTime, detailText, item.dueDateTime)
+
+        fun getItemWithUpdatedDueDate(item: TodoItem, dueDateTime: LocalDateTime?) =
+            TodoItem(item.name, item.isDone, item.creationDateTime, item.detailText, dueDateTime)
     }
 
-    infix fun shouldBeUpdatedBy(other: TodoItem) = hashCode() == other.hashCode()
+    infix fun shouldBeUpdatedBy(other: TodoItem): Boolean = hashCode() == other.hashCode()
 
     override fun toString(): String =
         "TodoItem(name: $name, isDone: $isDone, creationDateTime: $creationDateTime, detailText: $detailText)"
@@ -35,6 +39,7 @@ data class TodoItem(
         if (isDone != other.isDone) return false
         if (creationDateTime != other.creationDateTime) return false
         if (detailText != other.detailText) return false
+        if (dueDateTime != other.dueDateTime) return false
 
         return true
     }

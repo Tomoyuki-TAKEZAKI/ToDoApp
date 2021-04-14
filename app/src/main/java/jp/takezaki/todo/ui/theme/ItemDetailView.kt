@@ -44,6 +44,7 @@ fun ItemDetailView(
         Spacer(modifier = Modifier.padding(10.dp))
         ItemNameView(currentItem)
         ItemDetailTextView(currentItem)
+        ItemDueDateView(currentItem)
     }
 
     BackHandler {
@@ -127,3 +128,16 @@ private fun ItemDetailTextView(
     }
 }
 
+@Composable
+private fun ItemDueDateView(
+    item: TodoItem,
+    model: ListViewModel = viewModel(),
+) {
+    Column {
+        Text(
+            text = "due date",
+            fontSize = 20.sp,
+        )
+        // TODO
+    }
+}

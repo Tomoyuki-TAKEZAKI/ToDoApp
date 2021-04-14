@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import jp.takezaki.todo.TodoItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class ListViewModel : ViewModel() {
     private val _list = MutableLiveData<List<TodoItem>>()
@@ -59,6 +60,15 @@ class ListViewModel : ViewModel() {
         }
     }
 
+    fun updateItemDueDateTime(item: TodoItem, dueDateTime: LocalDateTime?) {
+        list.value!!.toMutableList().apply {
+            removeIf { it shouldBeUpdatedBy item }
+            add(TodoItem.getItemWithUpdatedDueDate(item, dueDateTime))
+            sortBy { it.creationDateTime }
+            onListModified()
+        }
+    }
+
     fun removeItem(item: TodoItem) {
         list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
@@ -83,6 +93,6 @@ class ListViewModel : ViewModel() {
 
         // for debugging
         println("= ".repeat(50))
-        forEach { println("saved: item $it, hashcode: ${it.hashCode()}") }
+        forEach { println("saved: item $it") }
     }
 }
