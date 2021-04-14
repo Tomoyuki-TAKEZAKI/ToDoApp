@@ -1,5 +1,6 @@
 package jp.takezaki.todo.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -16,9 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.takezaki.todo.Screen
 import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.viewmodel.ListViewModel
+import jp.takezaki.todo.viewmodel.ScreenViewModel
 
 @Composable
 fun ToDoListView(model: ListViewModel = viewModel()) {
@@ -55,7 +59,6 @@ private fun ListItemView(item: TodoItem) {
     ) {
         ItemCheckboxView(item)
         ItemTextView(item)
-        DeleteButton(item)
     }
 }
 
@@ -76,14 +79,16 @@ private fun ItemCheckboxView(
 @Composable
 private fun ItemTextView(
     item: TodoItem,
-    model: ListViewModel = viewModel(),
+    model: ScreenViewModel = viewModel(),
 ) {
-    TextField(
-        value = item.name,
-        onValueChange = {
-            model.modifyItemName(item, it)
+    Text(
+        text = item.name + item.creationDateTime, // for debug
+        modifier = Modifier
+            .padding(5.dp)
+            .clickable {
+            model.setScreen(Screen.DetailScreen(item))
         },
-        modifier = Modifier.padding(5.dp),
+        fontSize = 20.sp,
     )
 }
 

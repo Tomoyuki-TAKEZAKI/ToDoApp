@@ -26,44 +26,36 @@ class ListViewModel : ViewModel() {
     }
 
     fun addItem(name: String) {
-        val temp = list.value!!.toMutableList()
-
-        temp.add(TodoItem.getNewItem(name))
-
-        temp.onListModified()
+        list.value!!.toMutableList().apply {
+            add(TodoItem.getNewItem(name))
+            onListModified()
+        }
     }
 
     fun modifyItemName(item: TodoItem, newName: String) {
-        val temp = list.value!!.toMutableList()
-
-        temp.removeIf { it.hashCode() == item.hashCode() }
-        val updatedItem = TodoItem.getUpdatedItem(item, newName)
-        temp.add(updatedItem)
-        temp.sortBy { it.dateTime }
-
-        temp.onListModified()
+        list.value!!.toMutableList().apply {
+            removeIf { it.hashCode() == item.hashCode() }
+            add(TodoItem.getUpdatedItem(item, newName))
+            sortBy { it.creationDateTime }
+            onListModified()
+        }
     }
 
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
-        val temp = list.value!!.toMutableList()
-
-        temp.removeIf { it.hashCode() == item.hashCode() }
-        val updatedItem = TodoItem.getUpdatedItem(item, isDone)
-        temp.add(updatedItem)
-        temp.sortBy { it.dateTime }
-
-        temp.onListModified()
+        list.value!!.toMutableList().apply {
+            removeIf { it.hashCode() == item.hashCode() }
+            add(TodoItem.getUpdatedItem(item, isDone))
+            sortBy { it.creationDateTime }
+            onListModified()
+        }
     }
 
     fun removeItem(item: TodoItem) {
-        val temp = list.value!!.toMutableList()
-
-        temp.removeIf {
-            it.hashCode() == item.hashCode()
+        list.value!!.toMutableList().apply {
+            removeIf { it.hashCode() == item.hashCode() }
+            sortBy { it.creationDateTime }
+            onListModified()
         }
-        temp.sortBy { it.dateTime }
-
-        temp.onListModified()
     }
 
     private fun List<TodoItem>.onListModified() {
