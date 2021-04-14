@@ -118,7 +118,10 @@ private fun CheckBoxButton(
             imageVector = Icons.Default.Check,
             contentDescription = null,
         )
-        Text(text = msg)
+        Text(
+            text = msg,
+            modifier = Modifier.padding(horizontal = 5.dp)
+        )
     }
 }
 
