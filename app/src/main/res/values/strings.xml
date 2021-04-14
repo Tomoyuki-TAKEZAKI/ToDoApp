@@ -17,7 +17,7 @@
     <string name="item_detail_text">Detail</string>
     <string name="item_detail_due_date">Due date</string>
     <string name="item_detail_no_due_date">No due date has been set.</string>
-    <string name="item_detail_mark_as_done">Mark as done</string>
-    <string name="item_detail_mark_as_undone">Mark as undone</string>
+    <string name="item_detail_mark_completed">Mark completed</string>
+    <string name="item_detail_mark_uncompleted">Mark uncompleted</string>
 
 </resources>

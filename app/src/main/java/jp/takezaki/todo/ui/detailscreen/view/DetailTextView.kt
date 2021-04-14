@@ -20,7 +20,9 @@ fun DetailTextView(
     item: TodoItem,
     model: ListViewModel = viewModel(),
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(5.dp)
+    ) {
         Text(
             text = stringResource(R.string.item_detail_text),
             fontSize = 20.sp,

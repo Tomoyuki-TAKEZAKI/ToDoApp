@@ -20,7 +20,9 @@ fun ItemDetailNameView(
     item: TodoItem,
     model: ListViewModel = viewModel(),
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(5.dp)
+    ) {
         Text(
             text = stringResource(R.string.item_detail_name),
             fontSize = 20.sp,

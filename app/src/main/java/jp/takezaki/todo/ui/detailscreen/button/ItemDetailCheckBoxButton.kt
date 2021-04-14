@@ -23,13 +23,11 @@ fun ItemDetailCheckBoxButton(
     listViewModel: ListViewModel = viewModel(),
     screenViewModel: ScreenViewModel = viewModel(),
 ) {
-    val msg: String = stringResource(
-        if (item.isDone) {
-            R.string.item_detail_mark_as_undone
-        } else {
-            R.string.item_detail_mark_as_done
-        }
-    )
+    val msgId: Int = if (item.isDone) {
+        R.string.item_detail_mark_uncompleted
+    } else {
+        R.string.item_detail_mark_completed
+    }
 
     Button(
         onClick = {
@@ -43,7 +41,7 @@ fun ItemDetailCheckBoxButton(
             contentDescription = null,
         )
         Text(
-            text = msg,
+            text = stringResource(msgId),
             modifier = Modifier.padding(horizontal = 5.dp)
         )
     }
