@@ -1,9 +1,6 @@
 package jp.takezaki.todo.ui.listscreen.view
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -15,7 +12,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.takezaki.todo.R
 import jp.takezaki.todo.TodoItem
-import jp.takezaki.todo.ui.listscreen.button.NewItemButton
 import jp.takezaki.todo.viewmodel.ListViewModel
 import java.time.LocalDateTime
 
@@ -58,9 +54,7 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }) {
-            Column {
-                NewItemButton()
-            }
+            BottomBar()
         }
     }
 }

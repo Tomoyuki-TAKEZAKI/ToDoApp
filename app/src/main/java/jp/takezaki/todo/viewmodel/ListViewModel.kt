@@ -70,9 +70,16 @@ class ListViewModel : ViewModel() {
     }
 
     fun removeItem(item: TodoItem) {
-        list.value!!.toMutableList().apply {
+        _list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
             sortBy { it.creationDateTime }
+            onListModified()
+        }
+    }
+
+    fun removeAllCompletedItem() {
+        _list.value!!.toMutableList().apply {
+            removeAll { it.isDone }
             onListModified()
         }
     }
