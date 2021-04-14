@@ -30,28 +30,30 @@ import java.time.LocalDateTime
 fun ToDoListView(model: ListViewModel = viewModel()) {
     val list by model.list.observeAsState()
 
+    val sectionList = listOf<Pair<String, (TodoItem) -> Boolean>>(
+        Pair(
+            "after due date",
+            { it.dueDateTime?.isAfter(LocalDateTime.now()) == true },
+        ),
+        Pair(
+            "before due date",
+            { it.dueDateTime?.isBefore(LocalDateTime.now()) == true },
+        ),
+        Pair(
+            "no due date",
+            { it.dueDateTime == null },
+        ),
+    )
+
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
-        ListWithHeader(
-            list = list!!,
-            headerText = "after due date",
-        ) {
-            it.dueDateTime?.isAfter(LocalDateTime.now()) == true
-        }
-
-        ListWithHeader(
-            list = list!!,
-            headerText = "before due date",
-        ) {
-            it.dueDateTime?.isBefore(LocalDateTime.now()) == true
-        }
-
-        ListWithHeader(
-            list = list!!,
-            headerText = "no due date",
-        ) {
-            it.dueDateTime == null
+        sectionList.map { section ->
+            ListWithHeader(
+                list = list!!,
+                headerText = section.first,
+                predicate = section.second,
+            )
         }
 
         AddButton()
