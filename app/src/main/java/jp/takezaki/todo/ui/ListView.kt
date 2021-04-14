@@ -24,6 +24,7 @@ import jp.takezaki.todo.Screen
 import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.viewmodel.ListViewModel
 import jp.takezaki.todo.viewmodel.ScreenViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun ToDoListView(model: ListViewModel = viewModel()) {
@@ -32,10 +33,47 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
-        list?.map {
-            ListItemView(it)
+        ListWithHeader(
+            list = list!!,
+            headerText = "after due date",
+        ) {
+            it.dueDateTime?.isAfter(LocalDateTime.now()) == true
         }
+
+        ListWithHeader(
+            list = list!!,
+            headerText = "before due date",
+        ) {
+            it.dueDateTime?.isBefore(LocalDateTime.now()) == true
+        }
+
+        ListWithHeader(
+            list = list!!,
+            headerText = "no due date",
+        ) {
+            it.dueDateTime == null
+        }
+
         AddButton()
+    }
+}
+
+@Composable
+fun ListWithHeader(
+    list: List<TodoItem>,
+    headerText: String,
+    predicate: (TodoItem) -> Boolean,
+) {
+    val filteredList = list.filter(predicate)
+    if (filteredList.isEmpty()) return
+
+    Text(
+        text = headerText,
+        fontSize = 20.sp,
+        modifier = Modifier.padding(5.dp),
+    )
+    filteredList.map {
+        ListItemView(it)
     }
 }
 
