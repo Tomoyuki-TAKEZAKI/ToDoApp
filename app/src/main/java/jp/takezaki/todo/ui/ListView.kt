@@ -1,8 +1,6 @@
 package jp.takezaki.todo.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,36 +9,37 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.takezaki.todo.R
-import jp.takezaki.todo.Screen
 import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.viewmodel.ListViewModel
-import jp.takezaki.todo.viewmodel.ScreenViewModel
 import java.time.LocalDateTime
 
 @Composable
 fun ToDoListView(model: ListViewModel = viewModel()) {
-    val itemList by model.list.observeAsState()
+    val itemList: List<TodoItem>? by model.list.observeAsState()
 
     val sectionList: List<Pair<String, (TodoItem) -> Boolean>> = listOf(
         Pair(
-            stringResource(id = R.string.after_due_date),
-            { it.dueDateTime?.isAfter(LocalDateTime.now()) == true },
+            stringResource(id = R.string.listview_header_after_due_date),
+            { !it.isDone && it.dueDateTime?.isAfter(LocalDateTime.now()) == true },
         ),
         Pair(
-            stringResource(id = R.string.before_due_date),
-            { it.dueDateTime?.isBefore(LocalDateTime.now()) == true },
+            stringResource(id = R.string.listview_header_before_due_date),
+            { !it.isDone && it.dueDateTime?.isBefore(LocalDateTime.now()) == true },
         ),
         Pair(
-            stringResource(id = R.string.no_due_date),
-            { it.dueDateTime == null },
+            stringResource(id = R.string.listview_header_no_due_date),
+            { !it.isDone && it.dueDateTime == null },
         ),
+        Pair(
+            stringResource(id = R.string.listview_header_completed),
+            { it.isDone },
+        )
     )
 
     Column(
@@ -77,45 +76,6 @@ private fun ListWithHeader(
     }
 }
 
-@Composable
-private fun ListItemView(item: TodoItem) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ItemCheckboxView(item)
-        ItemTextView(item)
-    }
-}
-
-@Composable
-private fun ItemCheckboxView(
-    item: TodoItem,
-    model: ListViewModel = viewModel(),
-) {
-    Checkbox(
-        checked = item.isDone,
-        onCheckedChange = {
-            model.updateItemCheckbox(item, it)
-        },
-        modifier = Modifier.padding(5.dp),
-    )
-}
-
-@Composable
-private fun ItemTextView(
-    item: TodoItem,
-    model: ScreenViewModel = viewModel(),
-) {
-    Text(
-        text = item.name,
-        modifier = Modifier
-            .padding(5.dp)
-            .clickable {
-                model.setScreen(Screen.DetailScreen(item))
-            },
-        fontSize = 20.sp,
-    )
-}
 
 @Composable
 private fun NewItemButton() {
@@ -150,7 +110,7 @@ private fun NewItemDialog(
             showDialog.value = false
         },
         title = {
-            Text(text = stringResource(id = R.string.new_item))
+            Text(text = stringResource(id = R.string.new_item_dialog_title))
         },
         text = {
             TextField(
@@ -167,7 +127,7 @@ private fun NewItemDialog(
                     if (itemName.value.isEmpty()) return@Button
                     model.addNewItem(itemName.value)
                 }) {
-                Text(stringResource(id = R.string.ok))
+                Text(stringResource(id = R.string.new_item_dialog_ok))
             }
         },
         dismissButton = {
@@ -175,7 +135,7 @@ private fun NewItemDialog(
                 onClick = {
                     showDialog.value = false
                 }) {
-                Text(stringResource(id = R.string.cancel))
+                Text(stringResource(id = R.string.new_item_dialog_cancel))
             }
         }
     )

@@ -1,4 +1,4 @@
-package jp.takezaki.todo.ui.theme
+package jp.takezaki.todo.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -101,9 +101,9 @@ private fun CheckBoxButton(
 ) {
     val msg: String = stringResource(
         if (item.isDone) {
-            R.string.mark_as_undone
+            R.string.item_detail_mark_as_undone
         } else {
-            R.string.mark_as_done
+            R.string.item_detail_mark_as_done
         }
     )
 

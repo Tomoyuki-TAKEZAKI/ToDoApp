@@ -2,22 +2,22 @@
     <string name="app_name">ToDo</string>
 
     <!-- ListView -->
-    <string name="after_due_date">After due date</string>
-    <string name="before_due_date">Before due date</string>
-    <string name="no_due_date">No due date</string>
+    <string name="listview_header_after_due_date">After due date</string>
+    <string name="listview_header_before_due_date">Before due date</string>
+    <string name="listview_header_no_due_date">No due date</string>
+    <string name="listview_header_completed">Completed</string>
 
     <!-- NewItemDialog -->
-    <string name="new_item">New item</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    <string name="new_item_dialog_title">New item</string>
+    <string name="new_item_dialog_ok">OK</string>
+    <string name="new_item_dialog_cancel">Cancel</string>
 
     <!-- ItemDetailView -->
     <string name="item_detail_name">Name</string>
     <string name="item_detail_text">Detail</string>
     <string name="item_detail_due_date">Due date</string>
     <string name="item_detail_no_due_date">No due date has been set.</string>
-    <string name="mark_as_done">Mark as done</string>
-    <string name="mark_as_undone">Mark as undone</string>
-
+    <string name="item_detail_mark_as_done">Mark as done</string>
+    <string name="item_detail_mark_as_undone">Mark as undone</string>
 
 </resources>
