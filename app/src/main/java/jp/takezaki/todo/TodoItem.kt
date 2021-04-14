@@ -2,7 +2,7 @@ package jp.takezaki.todo
 
 import java.time.LocalDateTime
 
-class TodoItem private constructor(
+data class TodoItem(
     val name: String,
     val isDone: Boolean,
     val creationDateTime: LocalDateTime,
@@ -19,8 +19,21 @@ class TodoItem private constructor(
             TodoItem(item.name, isDone, item.creationDateTime)
     }
 
-    override fun toString(): String = "TodoItem(name: $name, isDone: $isDone, dateTime: $creationDateTime)"
+    infix fun shouldBeUpdatedBy(other: TodoItem) =
+        hashCode() == other.hashCode()
+
+    override fun toString(): String =
+        "TodoItem(name: $name, isDone: $isDone, creationDateTime: $creationDateTime)"
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is TodoItem) return false
+
+        if (name != other.name) return false
+        if (isDone != other.isDone) return false
+        if (creationDateTime != other.creationDateTime) return false
+
+        return true
+    }
 
     override fun hashCode(): Int = creationDateTime.hashCode()
-
 }

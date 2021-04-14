@@ -34,7 +34,7 @@ class ListViewModel : ViewModel() {
 
     fun modifyItemName(item: TodoItem, newName: String) {
         list.value!!.toMutableList().apply {
-            removeIf { it.hashCode() == item.hashCode() }
+            removeIf { it shouldBeUpdatedBy item }
             add(TodoItem.getUpdatedItem(item, newName))
             sortBy { it.creationDateTime }
             onListModified()
@@ -43,7 +43,7 @@ class ListViewModel : ViewModel() {
 
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
         list.value!!.toMutableList().apply {
-            removeIf { it.hashCode() == item.hashCode() }
+            removeIf { it shouldBeUpdatedBy item }
             add(TodoItem.getUpdatedItem(item, isDone))
             sortBy { it.creationDateTime }
             onListModified()
@@ -52,7 +52,7 @@ class ListViewModel : ViewModel() {
 
     fun removeItem(item: TodoItem) {
         list.value!!.toMutableList().apply {
-            removeIf { it.hashCode() == item.hashCode() }
+            removeIf { it shouldBeUpdatedBy item }
             sortBy { it.creationDateTime }
             onListModified()
         }
