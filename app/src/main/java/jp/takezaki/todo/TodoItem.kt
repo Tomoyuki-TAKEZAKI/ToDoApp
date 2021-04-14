@@ -19,8 +19,7 @@ data class TodoItem(
             TodoItem(item.name, isDone, item.creationDateTime)
     }
 
-    infix fun shouldBeUpdatedBy(other: TodoItem) =
-        hashCode() == other.hashCode()
+    infix fun shouldBeUpdatedBy(other: TodoItem) = hashCode() == other.hashCode()
 
     override fun toString(): String =
         "TodoItem(name: $name, isDone: $isDone, creationDateTime: $creationDateTime)"
