@@ -27,14 +27,14 @@ class ListViewModel : ViewModel() {
     }
 
     fun addNewItem(name: String) {
-        list.value!!.toMutableList().apply {
+        _list.value!!.toMutableList().apply {
             add(TodoItem.getNewItem(name))
             onListModified()
         }
     }
 
     fun updateItemName(item: TodoItem, newName: String) {
-        list.value!!.toMutableList().apply {
+        _list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
             add(TodoItem.getItemWithUpdatedName(item, newName))
             sortBy { it.creationDateTime }
@@ -43,7 +43,7 @@ class ListViewModel : ViewModel() {
     }
 
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
-        list.value!!.toMutableList().apply {
+        _list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
             add(TodoItem.getItemWithUpdatedCheckBox(item, isDone))
             sortBy { it.creationDateTime }
@@ -52,7 +52,7 @@ class ListViewModel : ViewModel() {
     }
 
     fun updateItemDetailText(item: TodoItem, detailText: String) {
-        list.value!!.toMutableList().apply {
+        _list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
             add(TodoItem.getItemWithUpdatedDetailText(item, detailText))
             sortBy { it.creationDateTime }
@@ -61,7 +61,7 @@ class ListViewModel : ViewModel() {
     }
 
     fun updateItemDueDateTime(item: TodoItem, dueDateTime: LocalDateTime?) {
-        list.value!!.toMutableList().apply {
+        _list.value!!.toMutableList().apply {
             removeIf { it shouldBeUpdatedBy item }
             add(TodoItem.getItemWithUpdatedDueDate(item, dueDateTime))
             sortBy { it.creationDateTime }

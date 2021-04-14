@@ -13,9 +13,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.takezaki.todo.R
 import jp.takezaki.todo.Screen
 import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.viewmodel.ListViewModel
@@ -28,15 +30,15 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
 
     val sectionList: List<Pair<String, (TodoItem) -> Boolean>> = listOf(
         Pair(
-            "After due date",
+            stringResource(id = R.string.after_due_date),
             { it.dueDateTime?.isAfter(LocalDateTime.now()) == true },
         ),
         Pair(
-            "Before due date",
+            stringResource(id = R.string.before_due_date),
             { it.dueDateTime?.isBefore(LocalDateTime.now()) == true },
         ),
         Pair(
-            "No due date",
+            stringResource(id = R.string.no_due_date),
             { it.dueDateTime == null },
         ),
     )
@@ -147,7 +149,9 @@ private fun NewItemDialog(
         onDismissRequest = {
             showDialog.value = false
         },
-        title = { Text(text = "New item") },
+        title = {
+            Text(text = stringResource(id = R.string.new_item))
+        },
         text = {
             TextField(
                 value = itemName.value,
@@ -163,7 +167,7 @@ private fun NewItemDialog(
                     if (itemName.value.isEmpty()) return@Button
                     model.addNewItem(itemName.value)
                 }) {
-                Text("OK")
+                Text(stringResource(id = R.string.ok))
             }
         },
         dismissButton = {
@@ -171,7 +175,7 @@ private fun NewItemDialog(
                 onClick = {
                     showDialog.value = false
                 }) {
-                Text("Cancel")
+                Text(stringResource(id = R.string.cancel))
             }
         }
     )

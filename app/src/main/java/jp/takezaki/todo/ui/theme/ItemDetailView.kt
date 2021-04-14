@@ -8,15 +8,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import jp.takezaki.todo.R
 import jp.takezaki.todo.Screen
 import jp.takezaki.todo.TodoItem
 import jp.takezaki.todo.viewmodel.ListViewModel
@@ -28,10 +31,10 @@ fun ItemDetailView(
     listViewModel: ListViewModel = viewModel(),
     screenViewModel: ScreenViewModel = viewModel(),
 ) {
-    val list by listViewModel.list.observeAsState()
+    val list: List<TodoItem>? by listViewModel.list.observeAsState()
 
     // TODO FIX
-    val currentItem = list!!.find { it shouldBeUpdatedBy item }!!
+    val currentItem: TodoItem = list!!.find { it shouldBeUpdatedBy item }!!
 
     Column(
         modifier = Modifier.padding(10.dp)
@@ -40,6 +43,7 @@ fun ItemDetailView(
         Row {
             BackButton()
             DeleteButton(currentItem)
+            CheckBoxButton(currentItem)
         }
 
         Spacer(modifier = Modifier.padding(10.dp))
@@ -84,8 +88,37 @@ private fun DeleteButton(
     ) {
         Icon(
             imageVector = Icons.Default.Delete,
-            contentDescription = null
+            contentDescription = null,
         )
+    }
+}
+
+@Composable
+private fun CheckBoxButton(
+    item: TodoItem,
+    listViewModel: ListViewModel = viewModel(),
+    screenViewModel: ScreenViewModel = viewModel(),
+) {
+    val msg: String = stringResource(
+        if (item.isDone) {
+            R.string.mark_as_undone
+        } else {
+            R.string.mark_as_done
+        }
+    )
+
+    Button(
+        onClick = {
+            listViewModel.updateItemCheckbox(item, !item.isDone)
+            if (!item.isDone) screenViewModel.setScreen(Screen.ListScreen)
+        },
+        modifier = Modifier.padding(5.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = null,
+        )
+        Text(text = msg)
     }
 }
 
@@ -96,7 +129,7 @@ private fun ItemNameView(
 ) {
     Column {
         Text(
-            text = "name",
+            text = stringResource(R.string.item_detail_name),
             fontSize = 20.sp,
         )
         TextField(
@@ -116,7 +149,7 @@ private fun ItemDetailTextView(
 ) {
     Column {
         Text(
-            text = "detail",
+            text = stringResource(R.string.item_detail_text),
             fontSize = 20.sp,
         )
         TextField(
@@ -134,11 +167,20 @@ private fun ItemDueDateView(
     item: TodoItem,
     model: ListViewModel = viewModel(),
 ) {
+    val dueDateString = if (item.dueDateTime != null) {
+        item.dueDateTime.toString()
+    } else {
+        stringResource(R.string.item_detail_no_due_date)
+    }
+
     Column {
         Text(
-            text = "due date",
+            text = stringResource(R.string.item_detail_due_date),
             fontSize = 20.sp,
         )
-        // TODO
+        Text(
+            text = dueDateString,
+            fontSize = 20.sp,
+        )
     }
 }

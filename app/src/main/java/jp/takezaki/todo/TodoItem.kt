@@ -7,7 +7,7 @@ class TodoItem private constructor(
     val isDone: Boolean,
     val creationDateTime: LocalDateTime,
     val detailText: String,
-    val dueDateTime: LocalDateTime?
+    val dueDateTime: LocalDateTime?,
 ) {
 
     companion object Factory {
@@ -20,10 +20,10 @@ class TodoItem private constructor(
         fun getItemWithUpdatedCheckBox(item: TodoItem, isDone: Boolean): TodoItem =
             TodoItem(item.name, isDone, item.creationDateTime, item.detailText, item.dueDateTime)
 
-        fun getItemWithUpdatedDetailText(item: TodoItem, detailText: String) =
+        fun getItemWithUpdatedDetailText(item: TodoItem, detailText: String): TodoItem =
             TodoItem(item.name, item.isDone, item.creationDateTime, detailText, item.dueDateTime)
 
-        fun getItemWithUpdatedDueDate(item: TodoItem, dueDateTime: LocalDateTime?) =
+        fun getItemWithUpdatedDueDate(item: TodoItem, dueDateTime: LocalDateTime?): TodoItem =
             TodoItem(item.name, item.isDone, item.creationDateTime, item.detailText, dueDateTime)
     }
 
