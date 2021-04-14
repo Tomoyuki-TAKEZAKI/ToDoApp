@@ -9,7 +9,7 @@
 
     <!-- NewItemDialog -->
     <string name="new_item_dialog_title">New item</string>
-    <string name="new_item_dialog_ok">OK</string>
+    <string name="new_item_dialog_save">Save</string>
     <string name="new_item_dialog_cancel">Cancel</string>
 
     <!-- ItemDetailView -->

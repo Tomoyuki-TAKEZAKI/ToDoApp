@@ -27,73 +27,82 @@ class ListViewModel : ViewModel() {
     }
 
     fun addNewItem(name: String) {
-        _list.value!!.toMutableList().apply {
-            add(TodoItem.getNewItem(name))
-            onListModified()
-        }
+        _list.value!!
+            .addNewItem(TodoItem.getNewItem(name))
+            .sortedByCreationDateTime()
+            .updateLiveData()
+            .save()
     }
 
     fun updateItemName(item: TodoItem, newName: String) {
-        _list.value!!.toMutableList().apply {
-            removeIf { it shouldBeUpdatedBy item }
-            add(TodoItem.getItemWithUpdatedName(item, newName))
-            sortBy { it.creationDateTime }
-            onListModified()
-        }
+        _list.value!!
+            .dropOldItem(item)
+            .addNewItem(TodoItem.getItemWithUpdatedName(item, newName))
+            .sortedByCreationDateTime()
+            .updateLiveData()
+            .save()
     }
 
     fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
-        _list.value!!.toMutableList().apply {
-            removeIf { it shouldBeUpdatedBy item }
-            add(TodoItem.getItemWithUpdatedCheckBox(item, isDone))
-            sortBy { it.creationDateTime }
-            onListModified()
-        }
+        _list.value!!
+            .dropOldItem(item)
+            .addNewItem(TodoItem.getItemWithUpdatedCheckBox(item, isDone))
+            .sortedByCreationDateTime()
+            .updateLiveData()
+            .save()
     }
 
     fun updateItemDetailText(item: TodoItem, detailText: String) {
-        _list.value!!.toMutableList().apply {
-            removeIf { it shouldBeUpdatedBy item }
-            add(TodoItem.getItemWithUpdatedDetailText(item, detailText))
-            sortBy { it.creationDateTime }
-            onListModified()
-        }
+        _list.value!!
+            .dropOldItem(item)
+            .addNewItem(TodoItem.getItemWithUpdatedDetailText(item, detailText))
+            .sortedByCreationDateTime()
+            .updateLiveData()
+            .save()
     }
 
     fun updateItemDueDateTime(item: TodoItem, dueDateTime: LocalDateTime?) {
-        _list.value!!.toMutableList().apply {
-            removeIf { it shouldBeUpdatedBy item }
-            add(TodoItem.getItemWithUpdatedDueDate(item, dueDateTime))
-            sortBy { it.creationDateTime }
-            onListModified()
-        }
+        _list.value!!
+            .dropOldItem(item)
+            .addNewItem(TodoItem.getItemWithUpdatedDueDate(item, dueDateTime))
+            .sortedByCreationDateTime()
+            .updateLiveData()
+            .save()
     }
 
     fun removeItem(item: TodoItem) {
-        _list.value!!.toMutableList().apply {
-            removeIf { it shouldBeUpdatedBy item }
-            sortBy { it.creationDateTime }
-            onListModified()
-        }
+        _list.value!!
+            .dropOldItem(item)
+            .sortedByCreationDateTime()
+            .updateLiveData()
+            .save()
     }
 
     fun removeAllCompletedItem() {
-        _list.value!!.toMutableList().apply {
-            removeAll { it.isDone }
-            onListModified()
-        }
+        _list.value!!
+            .dropCompletedItems()
+            .updateLiveData()
+            .save()
     }
 
-    private fun List<TodoItem>.onListModified() {
-        setList()
-        save()
-    }
+    private fun List<TodoItem>.dropOldItem(item: TodoItem): List<TodoItem> =
+        filterNot { it shouldBeUpdatedBy item }
 
-    private fun List<TodoItem>.setList() {
+    private fun List<TodoItem>.addNewItem(item: TodoItem): List<TodoItem> =
+        toMutableList().apply { add(item) }
+
+    private fun List<TodoItem>.dropCompletedItems(): List<TodoItem> =
+        filterNot { it.isDone }
+
+    private fun List<TodoItem>.sortedByCreationDateTime(): List<TodoItem> =
+        sortedBy { it.creationDateTime }
+
+    private fun List<TodoItem>.updateLiveData(): List<TodoItem> {
         _list.value = this
+        return this
     }
 
-    private fun List<TodoItem>.save() {
+    private fun List<TodoItem>.save(): List<TodoItem> {
         viewModelScope.launch(Dispatchers.IO) {
             // TODO save ItemList to DB
         }
@@ -101,5 +110,7 @@ class ListViewModel : ViewModel() {
         // for debugging
         println("= ".repeat(50))
         forEach { println("saved: item $it") }
+
+        return this
     }
 }
