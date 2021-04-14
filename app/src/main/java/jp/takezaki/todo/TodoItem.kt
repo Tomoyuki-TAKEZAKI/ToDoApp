@@ -29,8 +29,12 @@ class TodoItem private constructor(
 
     infix fun shouldBeUpdatedBy(other: TodoItem): Boolean = hashCode() == other.hashCode()
 
-    override fun toString(): String =
-        "TodoItem(name: $name, isDone: $isDone, creationDateTime: $creationDateTime, detailText: $detailText)"
+    override fun toString(): String = "TodoItem(" +
+            "name: $name, " +
+            "isDone: $isDone, " +
+            "creationDateTime: $creationDateTime, " +
+            "detailText: $detailText, " +
+            "dueDateTime: $dueDateTime)"
 
     override fun equals(other: Any?): Boolean {
         if (other !is TodoItem) return false

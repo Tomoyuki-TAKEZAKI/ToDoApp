@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun ToDoListView(model: ListViewModel = viewModel()) {
-    val list by model.list.observeAsState()
+    val itemList by model.list.observeAsState()
 
     val sectionList: List<Pair<String, (TodoItem) -> Boolean>> = listOf(
         Pair(
@@ -46,7 +46,7 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
     ) {
         sectionList.map {
             ListWithHeader(
-                list = list!!,
+                list = itemList!!,
                 headerText = it.first,
                 predicate = it.second,
             )
@@ -138,7 +138,7 @@ private fun NewItemButton() {
 }
 
 @Composable
-fun NewItemDialog(
+private fun NewItemDialog(
     showDialog: MutableState<Boolean>,
     model: ListViewModel = viewModel(),
 ) {

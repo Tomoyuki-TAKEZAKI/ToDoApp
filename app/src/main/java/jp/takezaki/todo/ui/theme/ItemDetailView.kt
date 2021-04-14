@@ -31,7 +31,8 @@ fun ItemDetailView(
     val list by listViewModel.list.observeAsState()
 
     // TODO FIX
-    val currentItem = list!!.find { it.hashCode() == item.hashCode() }!!
+    val currentItem = list!!.find { it shouldBeUpdatedBy item }!!
+
     Column(
         modifier = Modifier.padding(10.dp)
     ) {
