@@ -6,14 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,17 +26,17 @@ import java.time.LocalDateTime
 fun ToDoListView(model: ListViewModel = viewModel()) {
     val list by model.list.observeAsState()
 
-    val sectionList = listOf<Pair<String, (TodoItem) -> Boolean>>(
+    val sectionList: List<Pair<String, (TodoItem) -> Boolean>> = listOf(
         Pair(
-            "after due date",
+            "After due date",
             { it.dueDateTime?.isAfter(LocalDateTime.now()) == true },
         ),
         Pair(
-            "before due date",
+            "Before due date",
             { it.dueDateTime?.isBefore(LocalDateTime.now()) == true },
         ),
         Pair(
-            "no due date",
+            "No due date",
             { it.dueDateTime == null },
         ),
     )
@@ -48,20 +44,20 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
-        sectionList.map { section ->
+        sectionList.map {
             ListWithHeader(
                 list = list!!,
-                headerText = section.first,
-                predicate = section.second,
+                headerText = it.first,
+                predicate = it.second,
             )
         }
 
-        AddButton()
+        NewItemButton()
     }
 }
 
 @Composable
-fun ListWithHeader(
+private fun ListWithHeader(
     list: List<TodoItem>,
     headerText: String,
     predicate: (TodoItem) -> Boolean,
@@ -77,20 +73,6 @@ fun ListWithHeader(
     filteredList.map {
         ListItemView(it)
     }
-}
-
-@Composable
-private fun AddButton(model: ListViewModel = viewModel()) {
-    Button(
-        onClick = { model.addNewItem("") },
-        modifier = Modifier.padding(10.dp),
-        content = {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription = null,
-            )
-        }
-    )
 }
 
 @Composable
@@ -123,12 +105,74 @@ private fun ItemTextView(
     model: ScreenViewModel = viewModel(),
 ) {
     Text(
-        text = item.name + item.creationDateTime, // for debug
+        text = item.name,
         modifier = Modifier
             .padding(5.dp)
             .clickable {
                 model.setScreen(Screen.DetailScreen(item))
             },
         fontSize = 20.sp,
+    )
+}
+
+@Composable
+private fun NewItemButton() {
+    val showDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
+
+    Button(
+        onClick = {
+            showDialog.value = true
+        },
+        modifier = Modifier.padding(10.dp),
+        content = {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = null,
+            )
+        }
+    )
+
+    if (showDialog.value) {
+        NewItemDialog(showDialog)
+    }
+}
+
+@Composable
+fun NewItemDialog(
+    showDialog: MutableState<Boolean>,
+    model: ListViewModel = viewModel(),
+) {
+    val itemName = remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = {
+            showDialog.value = false
+        },
+        title = { Text(text = "New item") },
+        text = {
+            TextField(
+                value = itemName.value,
+                onValueChange = {
+                    itemName.value = it
+                }
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    showDialog.value = false
+                    if (itemName.value.isEmpty()) return@Button
+                    model.addNewItem(itemName.value)
+                }) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = {
+                    showDialog.value = false
+                }) {
+                Text("Cancel")
+            }
+        }
     )
 }
