@@ -78,6 +78,15 @@ class ListViewModel : ViewModel() {
             .save()
     }
 
+    /// undo remove
+    fun addItem(item: TodoItem) {
+        _list.value!!
+            .addNewItem(item)
+            .sortedByCreationDateTime()
+            .updateLiveData()
+            .save()
+    }
+
     fun removeAllCompletedItem() {
         _list.value!!
             .dropCompletedItems()

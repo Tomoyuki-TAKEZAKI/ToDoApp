@@ -79,7 +79,6 @@ private fun DetailContents(item: TodoItem) {
             .fillMaxSize()
             .padding(10.dp)
     ) {
-
         ItemDetailNameView(item)
         DetailTextView(item)
         DetailDueDateView(item)
