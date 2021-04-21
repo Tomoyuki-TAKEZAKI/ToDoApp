@@ -28,7 +28,16 @@ class ListViewModel : ViewModel() {
 
     fun addNewItem(name: String) {
         _list.value!!
-            .addNewItem(TodoItem.getNewItem(name))
+            .addNewItem(
+                TodoItem(
+                    LocalDateTime.now().hashCode(), // TODO ID発番はDBの責務にする
+                    name,
+                    false,
+                    LocalDateTime.now(),
+                    "",
+                    null,
+                )
+            )
             .sortedByCreationDateTime()
             .updateLiveData()
             .save()
@@ -37,16 +46,16 @@ class ListViewModel : ViewModel() {
     fun updateItemName(item: TodoItem, newName: String) {
         _list.value!!
             .dropOldItem(item)
-            .addNewItem(TodoItem.getItemWithUpdatedName(item, newName))
+            .addNewItem(item.updateName(newName))
             .sortedByCreationDateTime()
             .updateLiveData()
             .save()
     }
 
-    fun updateItemCheckbox(item: TodoItem, isDone: Boolean) {
+    fun updateCheckbox(item: TodoItem, isDone: Boolean) {
         _list.value!!
             .dropOldItem(item)
-            .addNewItem(TodoItem.getItemWithUpdatedCheckBox(item, isDone))
+            .addNewItem(item.updateCheckBox(isDone))
             .sortedByCreationDateTime()
             .updateLiveData()
             .save()
@@ -55,7 +64,7 @@ class ListViewModel : ViewModel() {
     fun updateItemDetailText(item: TodoItem, detailText: String) {
         _list.value!!
             .dropOldItem(item)
-            .addNewItem(TodoItem.getItemWithUpdatedDetailText(item, detailText))
+            .addNewItem(item.updateDetailText(detailText))
             .sortedByCreationDateTime()
             .updateLiveData()
             .save()
@@ -64,7 +73,7 @@ class ListViewModel : ViewModel() {
     fun updateItemDueDateTime(item: TodoItem, dueDateTime: LocalDateTime?) {
         _list.value!!
             .dropOldItem(item)
-            .addNewItem(TodoItem.getItemWithUpdatedDueDate(item, dueDateTime))
+            .addNewItem(item.updateDueDate(dueDateTime))
             .sortedByCreationDateTime()
             .updateLiveData()
             .save()

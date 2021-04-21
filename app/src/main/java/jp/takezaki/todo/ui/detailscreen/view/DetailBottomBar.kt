@@ -48,7 +48,7 @@ private fun ItemDetailCheckBoxSwitchButton(
         R.string.item_detail_mark_completed
     }
     Button(onClick = {
-        listViewModel.updateItemCheckbox(item, !item.isDone)
+        listViewModel.updateCheckbox(item, !item.isDone)
         if (!item.isDone) screenViewModel.setScreen(Screen.ListScreen)
     }) {
         Text(

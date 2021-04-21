@@ -34,7 +34,7 @@ private fun ItemCheckboxView(
     Checkbox(
         checked = item.isDone,
         onCheckedChange = {
-            model.updateItemCheckbox(item, it)
+            model.updateCheckbox(item, it)
         },
         modifier = Modifier.padding(5.dp),
     )

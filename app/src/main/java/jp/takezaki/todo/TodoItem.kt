@@ -2,7 +2,7 @@ package jp.takezaki.todo
 
 import java.time.LocalDateTime
 
-data class TodoItem private constructor(
+data class TodoItem constructor(
     val id: Int,
     val name: String,
     val isDone: Boolean,
@@ -11,62 +11,45 @@ data class TodoItem private constructor(
     val dueDateTime: LocalDateTime?,
 ) {
 
-    companion object Factory {
-        fun getNewItem(name: String): TodoItem =
-            TodoItem(
-                // DB（永続層）との連携
-                // idの一意性（データの生成）について誰が責任を持つのか？
-                // c.f. CRUD
-                LocalDateTime.now().hashCode(), // 衝突しない保証は？
-                name,
-                false,
-                LocalDateTime.now(),
-                "",
-                null
-            )
+    fun updateName(newName: String): TodoItem =
+        copy(
+            id = id,
+            name = newName,
+            isDone = isDone,
+            creationDateTime = creationDateTime,
+            detailText = detailText,
+            dueDateTime = dueDateTime
+        )
 
-        // data class なら以下を copy で表現できる
-        // fun Item.updateName など
-        fun getItemWithUpdatedName(item: TodoItem, newName: String): TodoItem =
-            TodoItem(
-                item.id,
-                newName,
-                item.isDone,
-                item.creationDateTime,
-                item.detailText,
-                item.dueDateTime
-            )
+    fun updateCheckBox(isDone: Boolean): TodoItem =
+        copy(
+            id = id,
+            name = name,
+            isDone = isDone,
+            creationDateTime = creationDateTime,
+            detailText = detailText,
+            dueDateTime = dueDateTime
+        )
 
-        fun getItemWithUpdatedCheckBox(item: TodoItem, isDone: Boolean): TodoItem =
-            TodoItem(
-                item.id,
-                item.name,
-                isDone,
-                item.creationDateTime,
-                item.detailText,
-                item.dueDateTime
-            )
+    fun updateDetailText(detailText: String): TodoItem =
+        copy(
+            id = id,
+            name = name,
+            isDone = isDone,
+            creationDateTime = creationDateTime,
+            detailText = detailText,
+            dueDateTime = dueDateTime
+        )
 
-        fun getItemWithUpdatedDetailText(item: TodoItem, detailText: String): TodoItem =
-            TodoItem(
-                item.id,
-                item.name,
-                item.isDone,
-                item.creationDateTime,
-                detailText,
-                item.dueDateTime
-            )
-
-        fun getItemWithUpdatedDueDate(item: TodoItem, dueDateTime: LocalDateTime?): TodoItem =
-            TodoItem(
-                item.id,
-                item.name,
-                item.isDone,
-                item.creationDateTime,
-                item.detailText,
-                dueDateTime
-            )
-    }
+    fun updateDueDate(dueDateTime: LocalDateTime?): TodoItem =
+        copy(
+            id = id,
+            name = name,
+            isDone = isDone,
+            creationDateTime = creationDateTime,
+            detailText = detailText,
+            dueDateTime = dueDateTime
+        )
 
     infix fun shouldBeUpdatedBy(other: TodoItem): Boolean = id == other.id
 
