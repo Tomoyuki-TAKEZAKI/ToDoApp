@@ -1,13 +1,22 @@
 package jp.takezaki.todo
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 
+@Entity(tableName = "todo_item")
 data class TodoItem constructor(
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
+    @ColumnInfo(name = "is_done")
     val isDone: Boolean,
+    @ColumnInfo(name = "creation_datetime")
     val creationDateTime: LocalDateTime,
+    @ColumnInfo(name = "detail_text")
     val detailText: String,
+    @ColumnInfo(name = "due_datetime")
     val dueDateTime: LocalDateTime?,
 ) {
 
@@ -18,7 +27,7 @@ data class TodoItem constructor(
             isDone = isDone,
             creationDateTime = creationDateTime,
             detailText = detailText,
-            dueDateTime = dueDateTime
+            dueDateTime = dueDateTime,
         )
 
     fun updateCheckBox(isDone: Boolean): TodoItem =
@@ -28,7 +37,7 @@ data class TodoItem constructor(
             isDone = isDone,
             creationDateTime = creationDateTime,
             detailText = detailText,
-            dueDateTime = dueDateTime
+            dueDateTime = dueDateTime,
         )
 
     fun updateDetailText(detailText: String): TodoItem =
@@ -38,7 +47,7 @@ data class TodoItem constructor(
             isDone = isDone,
             creationDateTime = creationDateTime,
             detailText = detailText,
-            dueDateTime = dueDateTime
+            dueDateTime = dueDateTime,
         )
 
     fun updateDueDate(dueDateTime: LocalDateTime?): TodoItem =
@@ -48,7 +57,7 @@ data class TodoItem constructor(
             isDone = isDone,
             creationDateTime = creationDateTime,
             detailText = detailText,
-            dueDateTime = dueDateTime
+            dueDateTime = dueDateTime,
         )
 
     infix fun shouldBeUpdatedBy(other: TodoItem): Boolean = id == other.id
