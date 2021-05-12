@@ -12,58 +12,50 @@ class ListViewModel(
 ) : ViewModel() {
     val allItems: LiveData<List<TodoItem>> = repository.allItems.asLiveData()
 
-    fun addNewItem(name: String) {
-        insert(
+    fun createNewItem(name: String) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(
             TodoItem(
-                0, // Insert methods treat 0 as not-set while inserting the item.
-                name,
-                false,
-                LocalDateTime.now(),
-                "",
-                null,
+                id = 0, // Insert methods treat 0 as not-set while inserting the item.
+                name = name,
+                isDone = false,
+                creationDateTime = LocalDateTime.now(),
+                detailText = "",
+                dueDateTime = null,
             )
         )
     }
 
-    fun updateItemName(item: TodoItem, newName: String) {
-        update(item.updateName(newName))
-    }
+    fun updateItemName(item: TodoItem, newName: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(item.updateName(newName))
+        }
 
-    fun updateCheckbox(item: TodoItem, isDone: Boolean) {
-        update(item.updateCheckBox(isDone))
-    }
+    fun updateCheckbox(item: TodoItem, isDone: Boolean) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(item.updateCheckBox(isDone))
+        }
 
-    fun updateItemDetailText(item: TodoItem, detailText: String) {
-        update(item.updateDetailText(detailText))
-    }
+    fun updateItemDetailText(item: TodoItem, detailText: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(item.updateDetailText(detailText))
+        }
 
-    fun updateItemDueDateTime(item: TodoItem, dueDateTime: LocalDateTime?) {
-        update(item.updateDueDate(dueDateTime))
-    }
+    fun updateItemDueDateTime(item: TodoItem, dueDateTime: LocalDateTime?) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(item.updateDueDate(dueDateTime))
+        }
 
-    fun removeItem(item: TodoItem) {
-        delete(item)
+    fun deleteItem(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(item)
     }
 
     /// undo remove
-    fun restoreDeletedItem(item: TodoItem) {
-        insert(item)
-    }
-
-    fun removeAllCompletedItem() {
-        // TODO
-    }
-
-    private fun insert(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
+    fun restoreDeletedItem(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(item)
     }
 
-    private fun update(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(item)
-    }
-
-    private fun delete(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(item)
+    fun deleteAllCompletedItem() = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteCompleted()
     }
 
 }

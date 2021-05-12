@@ -19,6 +19,9 @@ interface TodoItemDao {
     @Query("DELETE FROM todo_item")
     fun deleteAll()
 
+    @Query("DELETE FROM todo_item WHERE is_done = 1")
+    fun deleteCompleted()
+
     @Query("SELECT * FROM todo_item ORDER BY creation_datetime DESC")
     fun getAll(): Flow<List<TodoItem>>
 

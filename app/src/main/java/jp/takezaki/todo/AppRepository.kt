@@ -23,4 +23,9 @@ class AppRepository(private val itemDao: TodoItemDao) {
         itemDao.delete(item)
     }
 
+    @WorkerThread
+    fun deleteCompleted() {
+        itemDao.deleteCompleted()
+    }
+
 }

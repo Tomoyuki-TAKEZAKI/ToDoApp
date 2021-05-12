@@ -24,7 +24,7 @@ fun ItemDetailDeleteButton(
 ) {
     Button(
         onClick = {
-            listViewModel.removeItem(item)
+            listViewModel.deleteItem(item)
             screenViewModel.setScreen(Screen.ListScreen)
         },
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
