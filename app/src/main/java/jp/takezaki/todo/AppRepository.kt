@@ -9,17 +9,17 @@ class AppRepository(private val itemDao: TodoItemDao) {
     val allItems: Flow<List<TodoItem>> = itemDao.getAll()
 
     @WorkerThread
-    suspend fun insert(item: TodoItem) {
+    fun insert(item: TodoItem) {
         itemDao.insert(item)
     }
 
     @WorkerThread
-    suspend fun update(item: TodoItem) {
+    fun update(item: TodoItem) {
         itemDao.update(item)
     }
 
     @WorkerThread
-    suspend fun delete(item: TodoItem) {
+    fun delete(item: TodoItem) {
         itemDao.delete(item)
     }
 
