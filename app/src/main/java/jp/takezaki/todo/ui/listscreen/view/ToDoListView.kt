@@ -1,11 +1,11 @@
 package jp.takezaki.todo.ui.listscreen.view
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -25,19 +25,11 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        val (listSectionView, newItemButton) = createRefs()
-
-        Box(
-            modifier = Modifier
-                .fillMaxHeight(0.9f)
-                .constrainAs(listSectionView) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    bottom.linkTo(newItemButton.top)
-                }
-        ) {
+        Scaffold(bottomBar = { BottomBar() }) {
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxHeight(0.9f)
             ) {
                 sectionList().map {
                     ListSectionView(
@@ -47,17 +39,6 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
                     )
                 }
             }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxHeight(0.1f)
-                .constrainAs(newItemButton) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }) {
-            BottomBar()
         }
     }
 }

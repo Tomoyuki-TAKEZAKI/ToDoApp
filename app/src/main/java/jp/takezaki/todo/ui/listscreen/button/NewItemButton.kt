@@ -62,7 +62,6 @@ private fun NewItemDialog(
             Button(
                 onClick = {
                     showDialog.value = false
-                    if (itemName.value.isEmpty()) return@Button
                     model.addNewItem(itemName.value)
                 }) {
                 Text(stringResource(id = R.string.new_item_dialog_save))
