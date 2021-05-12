@@ -1,20 +1,22 @@
 package jp.takezaki.todo.ui.listscreen.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.constraintlayout.compose.ConstraintLayout
 import jp.takezaki.todo.ui.listscreen.button.MenuButton
 import jp.takezaki.todo.ui.listscreen.button.EditListButton
-import jp.takezaki.todo.ui.listscreen.button.NewItemButton
+//import jp.takezaki.todo.ui.listscreen.button.NewItemButton
 
 @Composable
 fun BottomBar() {
     ConstraintLayout(
         modifier = Modifier.fillMaxWidth()
     ) {
-        val (menuButton, newItemButton, editListButton) = createRefs()
+        val (menuButton, editListButton) = createRefs()
         Box(
             modifier = Modifier.constrainAs(menuButton) {
                 start.linkTo(parent.start)
@@ -23,16 +25,6 @@ fun BottomBar() {
             }
         ) {
             MenuButton()
-        }
-        Box(
-            modifier = Modifier.constrainAs(newItemButton) {
-                start.linkTo(menuButton.end)
-                end.linkTo(editListButton.start)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
-        ) {
-            NewItemButton()
         }
         Box(
             modifier = Modifier.constrainAs(editListButton) {

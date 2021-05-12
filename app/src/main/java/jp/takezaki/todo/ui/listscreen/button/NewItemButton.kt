@@ -1,6 +1,7 @@
 package jp.takezaki.todo.ui.listscreen.button
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,22 +16,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.takezaki.todo.R
 import jp.takezaki.todo.viewmodel.ListViewModel
 
+
 @Composable
 fun NewItemButton() {
     val showDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
 
-    Button(
+    FloatingActionButton(
+        shape = CircleShape,
         onClick = {
             showDialog.value = true
-        },
-        modifier = Modifier.padding(10.dp),
-        content = {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription = null,
-            )
         }
-    )
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Add,
+            contentDescription = null,
+        )
+    }
 
     if (showDialog.value) {
         NewItemDialog(showDialog)
@@ -60,6 +61,7 @@ private fun NewItemDialog(
         },
         confirmButton = {
             Button(
+                enabled = itemName.value.isNotEmpty(),
                 onClick = {
                     showDialog.value = false
                     model.addNewItem(itemName.value)

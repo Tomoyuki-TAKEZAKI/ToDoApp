@@ -1,5 +1,6 @@
 package jp.takezaki.todo.ui
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,6 +13,7 @@ import jp.takezaki.todo.ui.theme.ToDoTheme
 import jp.takezaki.todo.viewmodel.ListViewModel
 import jp.takezaki.todo.viewmodel.ScreenViewModel
 
+@ExperimentalMaterialApi
 @Composable
 fun TodoApp(
     listViewModel: ListViewModel = viewModel(),
