@@ -1,137 +1,79 @@
 package jp.takezaki.todo.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.room.Room
+import androidx.lifecycle.*
+import jp.takezaki.todo.AppRepository
 import jp.takezaki.todo.TodoItem
-import jp.takezaki.todo.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class ListViewModel : ViewModel() {
-    private val _list = MutableLiveData<List<TodoItem>>()
-    val list: LiveData<List<TodoItem>>
-        get() = _list
-
-    init {
-        loadItemList()
-    }
-
-    private fun loadItemList() {
-        _list.value = listOf()
-
-        viewModelScope.launch(Dispatchers.IO) {
-            // TODO load data from DB
-        }
-    }
+class ListViewModel(
+    private val repository: AppRepository
+) : ViewModel() {
+    val allItems: LiveData<List<TodoItem>> = repository.allItems.asLiveData()
 
     fun addNewItem(name: String) {
-        _list.value!!
-            .addNewItem(
-                TodoItem(
-                    LocalDateTime.now().hashCode(), // TODO ID発番はDBの責務にする
-                    name,
-                    false,
-                    LocalDateTime.now(),
-                    "",
-                    null,
-                )
+        insert(
+            TodoItem(
+                0, // Insert methods treat 0 as not-set while inserting the item.
+                name,
+                false,
+                LocalDateTime.now(),
+                "",
+                null,
             )
-            .sortedByCreationDateTime()
-            .updateLiveData()
-            .save()
+        )
     }
 
     fun updateItemName(item: TodoItem, newName: String) {
-        _list.value!!
-            .dropOldItem(item)
-            .addNewItem(item.updateName(newName))
-            .sortedByCreationDateTime()
-            .updateLiveData()
-            .save()
+        update(item.updateName(newName))
     }
 
     fun updateCheckbox(item: TodoItem, isDone: Boolean) {
-        _list.value!!
-            .dropOldItem(item)
-            .addNewItem(item.updateCheckBox(isDone))
-            .sortedByCreationDateTime()
-            .updateLiveData()
-            .save()
+        update(item.updateCheckBox(isDone))
     }
 
     fun updateItemDetailText(item: TodoItem, detailText: String) {
-        _list.value!!
-            .dropOldItem(item)
-            .addNewItem(item.updateDetailText(detailText))
-            .sortedByCreationDateTime()
-            .updateLiveData()
-            .save()
+        update(item.updateDetailText(detailText))
     }
 
     fun updateItemDueDateTime(item: TodoItem, dueDateTime: LocalDateTime?) {
-        _list.value!!
-            .dropOldItem(item)
-            .addNewItem(item.updateDueDate(dueDateTime))
-            .sortedByCreationDateTime()
-            .updateLiveData()
-            .save()
+        update(item.updateDueDate(dueDateTime))
     }
 
     fun removeItem(item: TodoItem) {
-        _list.value!!
-            .dropOldItem(item)
-            .sortedByCreationDateTime()
-            .updateLiveData()
-            .save()
+        delete(item)
     }
 
     /// undo remove
-    fun addItem(item: TodoItem) {
-        _list.value!!
-            .addNewItem(item)
-            .sortedByCreationDateTime()
-            .updateLiveData()
-            .save()
+    fun restoreDeletedItem(item: TodoItem) {
+        insert(item)
     }
 
     fun removeAllCompletedItem() {
-        _list.value!!
-            .dropCompletedItems()
-            .updateLiveData()
-            .save()
+        // TODO
     }
 
-    private fun List<TodoItem>.dropOldItem(item: TodoItem): List<TodoItem> =
-        filterNot { it shouldBeUpdatedBy item }
-
-    private fun List<TodoItem>.addNewItem(item: TodoItem): List<TodoItem> =
-        toMutableList().apply { add(item) }
-
-    private fun List<TodoItem>.dropCompletedItems(): List<TodoItem> =
-        filterNot { it.isDone }
-
-    private fun List<TodoItem>.sortedByCreationDateTime(): List<TodoItem> =
-        sortedBy { it.creationDateTime }
-
-    private fun List<TodoItem>.updateLiveData(): List<TodoItem> {
-        _list.value = this
-        return this
+    private fun insert(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(item)
     }
 
-    private fun List<TodoItem>.save(): List<TodoItem> {
-        viewModelScope.launch(Dispatchers.IO) {
-            // TODO save ItemList to DB
+    private fun update(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(item)
+    }
+
+    private fun delete(item: TodoItem) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(item)
+    }
+
+}
+
+class ListViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ListViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ListViewModel(repository) as T
         }
-
-        // for debugging
-        println("= ".repeat(50))
-        forEach { println("saved: item $it") }
-
-        return this
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

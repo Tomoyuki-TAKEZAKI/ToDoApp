@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun ToDoListView(model: ListViewModel = viewModel()) {
-    val itemList: List<TodoItem>? by model.list.observeAsState()
+    val itemList: List<TodoItem>? by model.allItems.observeAsState()
 
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
@@ -33,7 +33,7 @@ fun ToDoListView(model: ListViewModel = viewModel()) {
             ) {
                 sectionList().map {
                     ListSectionView(
-                        list = itemList!!,
+                        list = itemList ?: emptyList(),
                         headerText = stringResource(id = it.first),
                         predicate = it.second,
                     )

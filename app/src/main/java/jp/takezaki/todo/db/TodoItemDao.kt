@@ -2,9 +2,11 @@ package jp.takezaki.todo.db
 
 import androidx.room.*
 import jp.takezaki.todo.TodoItem
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodoItemDao {
+
     @Insert
     fun insert(item: TodoItem)
 
@@ -14,6 +16,10 @@ interface TodoItemDao {
     @Delete
     fun delete(item: TodoItem)
 
-    @Query("SELECT * FROM todo_item")
-    fun getAll(): List<TodoItem>
+    @Query("DELETE FROM todo_item")
+    fun deleteAll()
+
+    @Query("SELECT * FROM todo_item ORDER BY creation_datetime DESC")
+    fun getAll(): Flow<List<TodoItem>>
+
 }

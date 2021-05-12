@@ -9,17 +9,20 @@ import jp.takezaki.todo.Screen
 import jp.takezaki.todo.ui.detailscreen.view.ItemDetailView
 import jp.takezaki.todo.ui.listscreen.view.ToDoListView
 import jp.takezaki.todo.ui.theme.ToDoTheme
+import jp.takezaki.todo.viewmodel.ListViewModel
 import jp.takezaki.todo.viewmodel.ScreenViewModel
 
 @Composable
-fun TodoApp(model: ScreenViewModel = viewModel()) {
-
-    val screen by model.screen.observeAsState()
+fun TodoApp(
+    listViewModel: ListViewModel = viewModel(),
+    screenViewModel: ScreenViewModel = viewModel(),
+) {
+    val screen by screenViewModel.screen.observeAsState()
 
     ToDoTheme {
         Surface {
             when (val s = screen) {
-                is Screen.ListScreen -> ToDoListView()
+                is Screen.ListScreen -> ToDoListView(listViewModel)
                 is Screen.DetailScreen -> ItemDetailView(s.item)
             }
         }

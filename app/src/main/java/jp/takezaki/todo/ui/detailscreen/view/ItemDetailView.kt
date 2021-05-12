@@ -20,7 +20,7 @@ fun ItemDetailView(
     listViewModel: ListViewModel = viewModel(),
     screenViewModel: ScreenViewModel = viewModel(),
 ) {
-    val list: List<TodoItem>? by listViewModel.list.observeAsState()
+    val list: List<TodoItem>? by listViewModel.allItems.observeAsState()
 
     // TODO FIX
     val item: TodoItem = list!!.find { it shouldBeUpdatedBy item }!!
