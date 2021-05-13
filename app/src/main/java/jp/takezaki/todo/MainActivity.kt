@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material.ExperimentalMaterialApi
 import jp.takezaki.todo.ui.TodoApp
 import jp.takezaki.todo.viewmodel.ListViewModel
 import jp.takezaki.todo.viewmodel.ListViewModelFactory
@@ -14,6 +15,7 @@ class MainActivity : ComponentActivity() {
         ListViewModelFactory((application as MainApplication).repository)
     }
 
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
